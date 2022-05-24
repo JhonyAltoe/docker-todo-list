@@ -1,41 +1,41 @@
 version: "3"
 
 services:
-  todotests:
-    # build: 
-    #   context: ./todo-app/tests
-    #   dockerfile: Dockerfile
-    image: todotests
-    environments:
-      FRONT_HOST: todofront
-    restart: always
-    # networks:
-    #   - backend
-    depends_on:
-      - "todofront"
-      - "todoback"
-
-  todofront:
-    image: todofrontend
-    # command: npm start
-    restart: always
-    ports:
-      - 3000:3000
-    # volumes:
-    #   - ./todo-app/front-end:/home/node/app/front-end:wo
-    environment:
-      - REACT_APP_API_HOST=todoback
-    depends_on:
-      - "todoback"
-    # networks:
-    #   - backend
-
   todoback:
+    # build: ./todo-app/back-end
     image: todobackend
     ports:
       - 3001:3001
     # networks:
     #   - backend
+
+  todofront:
+    # build: ./todo-app/front-end
+    image: todofrontend
+    # command: npm start
+    # restart: always
+    ports:
+      - 3000:3000
+    # volumes:
+    #   - ./todo-app/front-end:/home/node/app/front-end:wo
+    environment:
+      REACT_APP_API_HOST: todoback
+    depends_on:
+      - "todoback"
+    # networks:
+    #   - backend
+
+  todotests:
+    # build: ./todo-app/tests
+    image: todotests
+    environment:
+      FRONT_HOST: todofront
+    # restart: always
+    # networks:
+    #   - backend
+    depends_on:
+      - "todofront"
+      - "todoback"
 
 # networks:
 #   backend:
